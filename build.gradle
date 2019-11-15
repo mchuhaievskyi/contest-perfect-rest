@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.1.9.RELEASE'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+compileJava {
+    options.incremental = true
+}
+
+dependencies {
+    implementation platform('org.springframework.boot:spring-boot-dependencies:2.1.9.RELEASE')
+    implementation(
+            'org.springframework.boot:spring-boot-starter',
+            'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-data-jpa',
+            'org.springframework.boot:spring-boot-starter-logging',
+            'com.h2database:h2',
+            'io.springfox:springfox-swagger2:2.9.2',
+            'io.springfox:springfox-swagger-ui:2.9.2',
+            'org.mapstruct:mapstruct:1.3.1.Final'
+    )
+
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor (
+            'org.projectlombok:lombok:1.18.10',
+            'org.mapstruct:mapstruct-processor:1.3.1.Final'
+    )
+}
