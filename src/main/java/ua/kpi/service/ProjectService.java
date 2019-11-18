@@ -9,6 +9,8 @@ import ua.kpi.entity.Project;
 import ua.kpi.mapper.ProjectMapper;
 import ua.kpi.repository.ProjectRepository;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @Transactional
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -24,7 +26,7 @@ public class ProjectService {
     }
 
     public void update(ProjectDto projectDto, Long projectId) {
-        projectRepository.read(projectId);
+        projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new);
 
         Project project = projectMapper.toEntity(projectDto);
         project.setId(projectId);
@@ -32,7 +34,7 @@ public class ProjectService {
     }
 
     public ProjectDto read(Long projectId) {
-        Project project = projectRepository.read(projectId);
+        Project project = projectRepository.findById(projectId).orElseThrow(EntityNotFoundException::new);
         return projectMapper.toDto(project);
     }
 

@@ -2,6 +2,7 @@ package ua.kpi.mapper;
 
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import ua.kpi.dto.FolderDto;
@@ -13,6 +14,7 @@ import java.util.List;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface FolderMapper {
 
+    @Mapping(target = "id", ignore = true)
     Folder toEntity(FolderDto folderDto);
 
     FolderDto toDto(Folder folder);

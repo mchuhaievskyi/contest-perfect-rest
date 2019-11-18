@@ -23,7 +23,7 @@ public class Folder {
     private Long id;
 
     @EqualsAndHashCode.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Project project;
 
     private String name;

@@ -9,6 +9,8 @@ import java.util.List;
 @Data
 public class FolderDto {
 
+    private String id;
+
     @NotBlank
     private String name;
 

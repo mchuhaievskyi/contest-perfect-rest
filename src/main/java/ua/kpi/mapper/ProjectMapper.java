@@ -2,6 +2,7 @@ package ua.kpi.mapper;
 
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import ua.kpi.dto.ProjectDto;
@@ -14,6 +15,7 @@ import java.util.List;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ProjectMapper {
 
+    @Mapping(target = "id", ignore = true)
     Project toEntity(ProjectDto projectDto);
 
     ProjectDto toDto(Project project);

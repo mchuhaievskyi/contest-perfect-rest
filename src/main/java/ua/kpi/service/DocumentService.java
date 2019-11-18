@@ -11,6 +11,8 @@ import ua.kpi.mapper.DocumentMapper;
 import ua.kpi.repository.DocumentRepository;
 import ua.kpi.repository.FolderRepository;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @Transactional
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -21,7 +23,7 @@ public class DocumentService {
     private DocumentRepository documentRepository;
 
     public Long create(DocumentDto documentDto, Long folderId) {
-        Folder folder = folderRepository.read(folderId);
+        Folder folder = folderRepository.findById(folderId).orElseThrow(EntityNotFoundException::new);
         Document document = documentMapper.toEntity(documentDto);
         folder.addDocument(document);
         documentRepository.save(document);
@@ -29,19 +31,19 @@ public class DocumentService {
     }
 
     public void update(DocumentDto documentDto,  Long documentId) {
-        documentRepository.read(documentId);
+        documentRepository.findById(documentId).orElseThrow(EntityNotFoundException::new);
         Document document = documentMapper.toEntity(documentDto);
         document.setId(documentId);
         documentRepository.save(document);
     }
 
     public DocumentDto read(Long documentId) {
-        Document document = documentRepository.read(documentId);
+        Document document = documentRepository.findById(documentId).orElseThrow(EntityNotFoundException::new);
         return documentMapper.toDto(document);
     }
 
     public void delete(Long documentId) {
-        Document document = documentRepository.read(documentId);
+        Document document = documentRepository.findById(documentId).orElseThrow(EntityNotFoundException::new);
         document.getFolder().deleteDocument(document);
         documentRepository.deleteById(documentId);
     }

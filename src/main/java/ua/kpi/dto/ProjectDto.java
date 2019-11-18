@@ -8,6 +8,8 @@ import java.util.List;
 
 @Data
 public class ProjectDto {
+    
+    private String id;
 
     @NotBlank
     private String name;
