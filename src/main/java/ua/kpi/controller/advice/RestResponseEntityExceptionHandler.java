@@ -1,5 +1,6 @@
 package ua.kpi.controller.advice;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -7,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ua.kpi.dto.ApiMessageDto;
 import ua.kpi.dto.ValidationErrorDto;
 
 import javax.persistence.EntityNotFoundException;
@@ -19,7 +20,14 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final String VALIDATION_ERROR_TEMPLATE = "Field '%s' %s";
+    @Value("${message.template.validation-error}")
+    private String validationErrorTemplate;
+
+    @Value("${message.entity-not-found}")
+    private String entityNotFoundMessage;
+
+    @Value("${message.internal-server-error}")
+    private String internalServerErrorMessage;
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -28,7 +36,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(fieldError -> String.format(VALIDATION_ERROR_TEMPLATE,
+                .map(fieldError -> String.format(validationErrorTemplate,
                         fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
 
@@ -37,12 +45,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler({EntityNotFoundException.class, EmptyResultDataAccessException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    protected void handleEntityNotFoundException() {
+    private ResponseEntity<ApiMessageDto> handleEntityNotFoundException() {
+        return new ResponseEntity<>(new ApiMessageDto(entityNotFoundMessage), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected void handleException() {
+    private ResponseEntity<ApiMessageDto> handleException() {
+        return new ResponseEntity<>(new ApiMessageDto(internalServerErrorMessage), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
