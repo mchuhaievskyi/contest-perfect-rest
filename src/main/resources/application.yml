@@ -1,0 +1,24 @@
+server:
+  port: 443
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: keystore
+    key-store-type: PKCS12
+    key-alias: tomcat
+message:
+  entity-not-found: Entity not found.
+  internal-server-error: Internal server error. Please, contact system administrator.
+  template:
+    validation-error: Field %s %s
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: xxx
+            client-secret: xxx
+            client-name: USER
+            provider: github
+            scope: no-scope
+            redirect-uri-template: https://localhost/login/oauth2/code/github
