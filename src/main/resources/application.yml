@@ -16,6 +16,7 @@ spring:
       client:
         registration:
           github:
+#            TODO: Remove hardcoded credentials
             client-id: a5b8a3602b17e8ac94bb
             client-secret: fd21fa52d5e0d6e3461bfeaa6a8f12df3e8934c0
             client-name: USER
